@@ -1,0 +1,19 @@
+I want to build an app which
+1) Shows Symtoms of each diease that can be identified easily(By looking).  This should have pictures and posisble recomendation
+2) Club them together (Like Face, Chest, Hands, legs....)
+3) Only consider the ones that are fact checked (We dont need the items wehere there are contraversies)
+4) App should be capable for installing in Andriod
+
+
+ Everything is saved. Here's what I stored:
+
+  Memory 1 — Project Overview covers:
+  - Full file structure and what each file does                                                                                                                               - All 18 conditions and which body part they belong to
+  - Every design decision made (Flutter, offline-first, Wikimedia images, wsrv.nl proxy fix, severity color coding)                                                           - What's built vs what's still to do
+
+  Memory 2 — Setup Instructions covers:
+  - Exact steps to install Flutter and Android Studio
+  - Commands to run/build the APK
+  - How to use the HTML demo in the meantime
+
+  When you come back to this project, just say "let's continue the Symptoms Guide app" and I'll have full context to pick up exactly where we left off.
