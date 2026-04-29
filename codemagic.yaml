@@ -18,12 +18,14 @@ workflows:
           flutter create --project-name symptomsguide --org com.vem567 --platforms android .
       - name: Configure release signing
         script: |
-          cat > android/key.properties << EOF
-          storePassword=$CM_KEYSTORE_PASSWORD
-          keyPassword=$CM_KEY_PASSWORD
-          keyAlias=$CM_KEY_ALIAS
-          storeFile=$CM_KEYSTORE_PATH
-          EOF
+          echo "CM_KEY_ALIAS=$CM_KEY_ALIAS"
+          echo "CM_KEYSTORE_PATH=$CM_KEYSTORE_PATH"
+          printf "storePassword=%s\n" "$CM_KEYSTORE_PASSWORD" > android/key.properties
+          printf "keyPassword=%s\n" "$CM_KEY_PASSWORD" >> android/key.properties
+          printf "keyAlias=%s\n" "$CM_KEY_ALIAS" >> android/key.properties
+          printf "storeFile=%s\n" "$CM_KEYSTORE_PATH" >> android/key.properties
+          echo "--- key.properties ---"
+          cat android/key.properties
           python3 scripts/inject_signing.py
       - name: Build Android App Bundle
         script: |
