@@ -6,7 +6,9 @@ workflows:
       flutter: stable
       java: 17
       android_signing:
-        - symptoms_guide_keystore     # name you'll create in Codemagic UI
+        - symptoms_guide_keystore
+      groups:
+        - google_play
     scripts:
       - name: Get Flutter packages
         script: flutter pub get
