@@ -1,4 +1,4 @@
-package com.globalgenius.symptomsguide
+package com.vem567.symptomsguide
 
 import io.flutter.embedding.android.FlutterActivity
 

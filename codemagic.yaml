@@ -15,7 +15,7 @@ workflows:
       - name: Build Android App Bundle
         script: |
           BUILD_NUMBER=$(($(google-play get-latest-build-number \
-            --package-name "com.globalgenius.symptomsguide" \
+            --package-name "com.vem567.symptomsguide" \
             --tracks=internal 2>/dev/null || echo 0) + 1))
           flutter build appbundle \
             --release \
