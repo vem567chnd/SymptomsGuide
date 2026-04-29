@@ -8,7 +8,7 @@ workflows:
       android_signing:
         - symptoms_guide_keystore
       groups:
-        - google_play
+        - BuildCo
     scripts:
       - name: Get Flutter packages
         script: flutter pub get
