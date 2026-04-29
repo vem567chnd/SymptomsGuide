@@ -12,6 +12,10 @@ workflows:
     scripts:
       - name: Get Flutter packages
         script: flutter pub get
+      - name: Regenerate Android project
+        script: |
+          rm -rf android
+          flutter create --project-name symptomsguide --org com.vem567 --platforms android .
       - name: Build Android App Bundle
         script: |
           BUILD_NUMBER=$(($(google-play get-latest-build-number \
@@ -26,6 +30,6 @@ workflows:
       - build/app/outputs/mapping/release/mapping.txt
     publishing:
       google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS   # set in Codemagic UI
-        track: internal                                      # internal → alpha → beta → production
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
         submit_as_draft: true
