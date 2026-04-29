@@ -16,6 +16,15 @@ workflows:
         script: |
           rm -rf android
           flutter create --project-name symptomsguide --org com.vem567 --platforms android .
+      - name: Configure release signing
+        script: |
+          printf "storePassword=%s\n" "$CM_KEYSTORE_PASSWORD" > android/key.properties
+          printf "keyPassword=%s\n" "$CM_KEY_PASSWORD" >> android/key.properties
+          printf "keyAlias=%s\n" "$CM_KEY_ALIAS" >> android/key.properties
+          printf "storeFile=%s\n" "$CM_KEYSTORE_PATH" >> android/key.properties
+          echo "=== key.properties ==="
+          cat android/key.properties
+          python3 scripts/inject_signing.py
       - name: Build Android App Bundle
         script: |
           BUILD_NUMBER=$(($(google-play get-latest-build-number \
@@ -24,12 +33,7 @@ workflows:
           flutter build appbundle \
             --release \
             --build-name=1.0.0 \
-            --build-number=$BUILD_NUMBER \
-            -- \
-            -Pandroid.injected.signing.store.file="$CM_KEYSTORE_PATH" \
-            -Pandroid.injected.signing.store.password="$CM_KEYSTORE_PASSWORD" \
-            -Pandroid.injected.signing.key.alias="$CM_KEY_ALIAS" \
-            -Pandroid.injected.signing.key.password="$CM_KEY_PASSWORD"
+            --build-number=$BUILD_NUMBER
     artifacts:
       - build/app/outputs/bundle/release/app-release.aab
       - build/app/outputs/mapping/release/mapping.txt
