@@ -16,6 +16,41 @@ workflows:
         script: |
           rm -rf android
           flutter create --project-name symptomsguide --org com.vem567 --platforms android .
+      - name: Configure release signing
+        script: |
+          cat > android/key.properties << EOF
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyPassword=$CM_KEY_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          storeFile=$CM_KEYSTORE_PATH
+          EOF
+          python3 - << 'PYEOF'
+          with open('android/app/build.gradle', 'r') as f:
+              c = f.read()
+          load_ks = (
+              'def keystoreProperties = new Properties()\n'
+              'def keystorePropertiesFile = rootProject.file("key.properties")\n'
+              'if (keystorePropertiesFile.exists()) {\n'
+              '    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))\n'
+              '}\n\n'
+          )
+          signing_cfg = (
+              '    signingConfigs {\n'
+              '        release {\n'
+              '            keyAlias keystoreProperties["keyAlias"]\n'
+              '            keyPassword keystoreProperties["keyPassword"]\n'
+              '            storeFile file(keystoreProperties["storeFile"])\n'
+              '            storePassword keystoreProperties["storePassword"]\n'
+              '        }\n'
+              '    }\n'
+          )
+          c = c.replace('android {', load_ks + 'android {', 1)
+          c = c.replace('    buildTypes {', signing_cfg + '    buildTypes {', 1)
+          c = c.replace('        release {\n', '        release {\n            signingConfig signingConfigs.release\n', 1)
+          with open('android/app/build.gradle', 'w') as f:
+              f.write(c)
+          print('Signing config injected into build.gradle')
+          PYEOF
       - name: Build Android App Bundle
         script: |
           BUILD_NUMBER=$(($(google-play get-latest-build-number \
